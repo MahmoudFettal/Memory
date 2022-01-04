@@ -1,0 +1,20 @@
+#title {
+    -fx-background-color: red;
+}
+
+.scene {
+    -fx-background-color: "#81c483";
+}
+
+.button {
+    -fx-padding: 0;
+    -fx-fill: none;
+    -fx-border-color: none;
+    -fx-border-style: none;
+    -fx-border-width: 0;
+    -fx-border-insets: 0;
+    -fx-focus-color: transparent;
+    -fx-outline: 0;
+    -fx-stroke: none;
+    -fx-background-color: none;
+}
