@@ -1,3 +1,5 @@
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -10,6 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,20 +22,28 @@ public class Main extends Application {
     GridPane titleGrid = new GridPane();
     GridPane bottomgrid = new GridPane();
 
-    public int clicks = 0;
-    public ArrayList<Card> lastRound = new ArrayList<>();
-    public int unvield = 0;
+    int clicks = 0;
+    ArrayList<Card> lastRound = new ArrayList<>();
+    int unvield = 0;
+    int time = 0;
 
     public static void main(String... args) {
         launch(args);
     }
 
     static void setFrame(Card card, HashMap<String, Image> frames) {
-        Image img = card.isFlipped() ? frames.get(Integer.toString(card.getIdCard())):frames.get("flipped");
+        Image img = frames.get(card.toString());
         ImageView view = new ImageView(img);
         view.setFitHeight(100);
         view.setPreserveRatio(true);
         card.setGraphic(view);
+    }
+
+    static String timeText(int i) {
+        String min = String.format("%s%d",i/60 < 10 ?"0":"", i/60);
+        String sec = String.format("%s%d",i%60 < 10 ?"0":"", i%60);
+
+        return String.format("%s:%s",min,sec);
     }
 
     public void start(Stage primaryStage) {
@@ -43,6 +54,11 @@ public class Main extends Application {
         title.setId("title");
 
         Text score = new Text(String.format("Score %d", unvield));
+        Text timerText = new Text("Time: " + timeText(time));
+        score.setFill(Color.web("white"));
+        timerText.setFill(Color.web("white"));
+        score.setTextAlignment(TextAlignment.CENTER);
+        score.setTextAlignment(TextAlignment.RIGHT);
 
         lastRound.add(new Card());
         lastRound.add(new Card());
@@ -56,6 +72,16 @@ public class Main extends Application {
 
         frames.put("flipped", new Image("/images/flipped.png"));
         frames.put("refresh", new Image("/images/refresh.png"));
+        frames.put("empty", new Image("/images/empty.png"));
+
+
+        Timeline timer = new Timeline(new KeyFrame(Duration.seconds(1),
+                (event) -> {
+                    time++;
+                    timerText.setText("Time: " + timeText(time));
+                }));
+        timer.setCycleCount(Timeline.INDEFINITE);
+        timer.play();
 
         for (int i = 0; i < frames_list.length; i++) {
             frames.put(Integer.toString(i), new Image(String.format("/images/%s.png",frames_list[i])));
@@ -70,14 +96,6 @@ public class Main extends Application {
                 setFrame(card, frames);
 
                 card.setOnAction(e -> {
-                    if (clicks == 2) {
-                        clicks = 0;
-                        if (lastRound.get(0).getIdCard() != lastRound.get(1).getIdCard()) {
-                            lastRound.get(0).hide(); lastRound.get(1).hide();
-                            setFrame(lastRound.get(0), frames); setFrame(lastRound.get(1), frames);
-                        }
-                    }
-
                     if (clicks < 2 && !card.isFlipped()) {
                         card.unveil();
                         setFrame(card, frames);
@@ -85,12 +103,28 @@ public class Main extends Application {
                         clicks++;
 
                         if (clicks == 2) {
-                            if (lastRound.get(0).getIdCard() == lastRound.get(1).getIdCard()) {
+                            if (lastRound.get(0).getIdCard() != lastRound.get(1).getIdCard()) {
+                                Timeline incorrect = new Timeline(new KeyFrame(Duration.millis(500),
+                                        (event) -> {
+                                            lastRound.get(0).hide(); lastRound.get(1).hide();
+                                            setFrame(lastRound.get(0), frames); setFrame(lastRound.get(1), frames);
+                                            clicks = 0;
+                                        }));
+                                incorrect.play();
+                            } else {
                                 unvield += 2;
+                                Timeline correct = new Timeline(new KeyFrame(Duration.millis(200),
+                                        (event) -> {
+                                            lastRound.get(0).kill(); lastRound.get(1).kill();
+                                            setFrame(lastRound.get(0), frames); setFrame(lastRound.get(1), frames);
+                                            clicks = 0;
+                                        }));
+                                correct.play();
                                 score.setText(String.format("Score %d", unvield));
                                 if (unvield == dimx*dimy) {
                                     System.out.println("You did it!");
-                                    title.setFill(Color.web("#FF7F59"));
+                                    title.setFill(Color.web("#6163FF"));
+                                    timer.stop();
                                     title.setText("\uD83C\uDF89 Congrats \uD83C\uDF89");
                                 }
                             };
@@ -124,19 +158,24 @@ public class Main extends Application {
            clicks = 0;
            game.generateBoard();
            title.setText("Keep Going");
-           title.setFill(Color.web("gray"));
+           title.setFill(Color.web("white"));
            score.setText(String.format("Score %d", unvield));
+           time = 0;
+           timer.play();
            for (int i = 0; i < dimx; i++) {
                 for (int j = 0; j < dimy; j++) {
                     buttons.get(i).get(j).hide();
+                    buttons.get(i).get(j).revive();
                     setFrame(buttons.get(i).get(j), frames);
-
                 }
             }
         });
+        bottomgrid.setAlignment(Pos.CENTER);
+        bottomgrid.setHgap(100);
+        bottomgrid.setVgap(100);
         bottomgrid.add(refresh, 0,0, 1,1);
-        bottomgrid.add(score, 1,0, 3,1);
-
+        bottomgrid.add(score, 1,0, 1,1);
+        bottomgrid.add(timerText, 2,0, 1,1);
 
         grid.add(titleGrid,0, 0, dimx, 1);
         grid.add(bottomgrid, 0, dimy+1, dimx, 1);
