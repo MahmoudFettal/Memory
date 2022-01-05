@@ -101,7 +101,11 @@ public class Board {
 
     public void generateBoard() {
         // this function generates the board of the game randomly
-
+        for (int i = 0; i < dimx; i++) {
+            for (int j = 0; j < dimy; j++) {
+                board.get(i).get(j).setIdCard(-1);
+            }
+        }
         Random generator = new Random();
         int count = 0;
         int position;
@@ -111,7 +115,7 @@ public class Board {
                     position = generator.nextInt((dimx*dimy)/2);
                 } while(exist_twice(position));
                 count++;
-                board.get(i).get(j).setId(position);
+                board.get(i).get(j).setIdCard(position);
             }
         }
 

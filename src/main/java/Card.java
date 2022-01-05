@@ -4,7 +4,7 @@ public class Card extends Button{
     private int idCard = -1;
     private boolean flipped = false;
 
-    public void setId(int idCard) {
+    public void setIdCard(int idCard) {
         this.idCard = idCard;
     }
 

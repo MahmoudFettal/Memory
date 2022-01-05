@@ -1,8 +1,20 @@
 #title {
-    -fx-background-color: red;
+    -fx-fill: gray;
+    -fx-font-weight: bold;
+    -fx-font-size: 35px;
+    -fx-padding: 50;
+    -fx-arc-height: 50;
+    -fx-text-alignment: center;
 }
 
-.scene {
+.root{
+    -fx-font-size: 16pt;
+    -fx-font-family: "Poppins";
+    -fx-base: black;
+    -fx-background: white;
+}
+
+. scene {
     -fx-background-color: "#81c483";
 }
 
