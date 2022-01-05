@@ -15,10 +15,6 @@
     -fx-background: #0f0f0f;
 }
 
-. scene {
-    -fx-background-color: "#81c483";
-}
-
 .text {
     -fx-fill: white;
 }
