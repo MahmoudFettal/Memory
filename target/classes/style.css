@@ -8,11 +8,11 @@
 }
 
 .root{
-    -fx-font-size: 16pt;
+    -fx-font-size: 12pt;
     -fx-font-family: "Poppins";
     -fx-base: white;
-    -fx-fill: white;
-    -fx-background: #0f0f0f;
+    -fx-fill: black;
+    -fx-background: #383838;
 }
 
 .text {

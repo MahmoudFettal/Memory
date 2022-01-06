@@ -123,7 +123,7 @@ public class Main extends Application {
                                 score.setText(String.format("Score %d", unvield));
                                 if (unvield == dimx*dimy) {
                                     System.out.println("You did it!");
-                                    title.setFill(Color.web("#6163FF"));
+                                    title.setFill(Color.web("#FB7575"));
                                     timer.stop();
                                     title.setText("\uD83C\uDF89 Congrats \uD83C\uDF89");
                                 }
@@ -157,7 +157,7 @@ public class Main extends Application {
            unvield = 0;
            clicks = 0;
            game.generateBoard();
-           title.setText("Keep Going");
+           title.setText("Keep Going...");
            title.setFill(Color.web("white"));
            score.setText(String.format("Score %d", unvield));
            time = 0;
@@ -186,7 +186,7 @@ public class Main extends Application {
             }
         }
 
-        Scene scene = new Scene(grid, 500, 600);
+        Scene scene = new Scene(grid, 480, 570);
         scene.getStylesheets().add("/style.css");
 
         primaryStage.setTitle("Memory");
