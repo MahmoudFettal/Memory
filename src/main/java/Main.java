@@ -19,7 +19,6 @@ import java.util.HashMap;
 
 public class Main extends Application {
     GridPane grid = new GridPane();
-    GridPane titleGrid = new GridPane();
     GridPane bottomgrid = new GridPane();
 
     int clicks = 0;
@@ -34,7 +33,7 @@ public class Main extends Application {
     static void setFrame(Card card, HashMap<String, Image> frames) {
         Image img = frames.get(card.toString());
         ImageView view = new ImageView(img);
-        view.setFitHeight(100);
+        view.setFitHeight(300);
         view.setPreserveRatio(true);
         card.setGraphic(view);
     }
@@ -47,7 +46,7 @@ public class Main extends Application {
     }
 
     public void start(Stage primaryStage) {
-        Board game = new Board(4,4);
+        Board game = new Board(4,2);
         game.generateBoard();
 
         Text title = new Text("Keep going...");
@@ -57,7 +56,7 @@ public class Main extends Application {
         Text timerText = new Text("Time: " + timeText(time));
         score.setFill(Color.web("white"));
         timerText.setFill(Color.web("white"));
-        score.setTextAlignment(TextAlignment.CENTER);
+        timerText.setId("time");
         score.setTextAlignment(TextAlignment.RIGHT);
 
         lastRound.add(new Card());
@@ -92,7 +91,7 @@ public class Main extends Application {
             for (int j = 0; j < dimy; j++) {
                 Card card = game.getCard(i,j);
                 buttons.get(i).add(card);
-                card.setPrefSize(100, 100);
+                card.setPrefSize(214, 300);
                 setFrame(card, frames);
 
                 card.setOnAction(e -> {
@@ -123,11 +122,11 @@ public class Main extends Application {
                                 score.setText(String.format("Score %d", unvield));
                                 if (unvield == dimx*dimy) {
                                     System.out.println("You did it!");
-                                    title.setFill(Color.web("#FB7575"));
+                                    title.setFill(Color.web("white"));
                                     timer.stop();
                                     title.setText("\uD83C\uDF89 Congrats \uD83C\uDF89");
                                 }
-                            };
+                            }
                         }
                     }
                 });
@@ -139,18 +138,14 @@ public class Main extends Application {
         grid.setVgap(10);
         grid.setPadding(new Insets(50, 50, 50, 50));
 
-        titleGrid.setAlignment(Pos.CENTER);
-        titleGrid.setPadding(new Insets(10, 0, 10, 0));
-        titleGrid.add(title, 0,0, 1,1);
-
         bottomgrid.setAlignment(Pos.CENTER);
         bottomgrid.setPadding(new Insets(10, 0, 10, 0));
 
         Button refresh = new Button();
-        refresh.setPrefSize(5, 5);
+        refresh.setPrefSize(15, 15);
         Image refreshImg = frames.get("refresh");
         ImageView refreshView = new ImageView(refreshImg);
-        refreshView.setFitHeight(25);
+        refreshView.setFitHeight(40);
         refreshView.setPreserveRatio(true);
         refresh.setGraphic(refreshView);
         refresh.setOnAction (e -> {
@@ -171,13 +166,11 @@ public class Main extends Application {
             }
         });
         bottomgrid.setAlignment(Pos.CENTER);
-        bottomgrid.setHgap(100);
-        bottomgrid.setVgap(100);
-        bottomgrid.add(refresh, 0,0, 1,1);
-        bottomgrid.add(score, 1,0, 1,1);
+        bottomgrid.setHgap(200);
+        bottomgrid.add(title, 0,0, 1,1);
+        bottomgrid.add(refresh, 1,0, 1,1);
         bottomgrid.add(timerText, 2,0, 1,1);
 
-        grid.add(titleGrid,0, 0, dimx, 1);
         grid.add(bottomgrid, 0, dimy+1, dimx, 1);
 
         for (int i = 0; i < dimx; i++) {
@@ -186,7 +179,7 @@ public class Main extends Application {
             }
         }
 
-        Scene scene = new Scene(grid, 480, 570);
+        Scene scene = new Scene(grid, 1000, 750);
         scene.getStylesheets().add("/style.css");
 
         primaryStage.setTitle("Memory");

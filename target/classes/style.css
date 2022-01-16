@@ -1,4 +1,4 @@
-#title {
+#title, #time {
     -fx-fill: white;
     -fx-font-weight: bold;
     -fx-font-size: 35px;
@@ -12,7 +12,7 @@
     -fx-font-family: "Poppins";
     -fx-base: white;
     -fx-fill: black;
-    -fx-background: #383838;
+    -fx-background: #F3534C;
 }
 
 .text {
