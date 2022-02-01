@@ -1,12 +1,9 @@
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
+
 
 public class Board {
-    int dimx = 4;
-    int dimy = 4;
-    int unvield = 0;
-    int round = 0;
+    int dimx, dimy;
     ArrayList<ArrayList<Card>> board;
 
     public int getDimx() {
@@ -21,10 +18,6 @@ public class Board {
         return board.get(i).get(j);
     }
 
-    public ArrayList<ArrayList<Card>> getBoard() {
-        return board;
-    }
-
     public Board(int dimx, int dimy){
         this.dimx = dimx;
         this.dimy = dimy;
@@ -32,7 +25,7 @@ public class Board {
         board = new ArrayList<>();
 
         for (int i = 0; i < dimx; i++) {
-            board.add(new ArrayList<Card>());
+            board.add(new ArrayList<>());
             for (int j = 0; j < dimy; j++) {
                 board.get(i).add(new Card());
             }
@@ -40,15 +33,7 @@ public class Board {
     }
 
     public static void main(String[] args) {
-        Board game = new Board(4, 4);
-        game.generateBoard();
-
-        while (game.unvield < game.dimx * game.dimy ) {
-            game.playTurn();
-            System.out.println(game);
-        }
-
-        System.out.println("Congrats you did it!");
+        System.out.println("This is the board app!");
     }
 
     private Boolean exist_twice(int x) {
@@ -58,45 +43,10 @@ public class Board {
                 if (x == i.getIdCard()) {
                     count++;
                     if (count == 2) return true;
-                };
+                }
             }
         }
         return false;
-    }
-
-    private Card flipCard() {
-        int x, y;
-        System.out.println("Choose a case: ");
-        Scanner input = new Scanner(System.in);
-        // input the coordinate
-        x = input.nextInt();
-        y = input.nextInt();
-
-        Card card = board.get(x).get(y);
-
-        if (card.isFlipped()) {
-            System.out.println("already flipped");
-            flipCard();
-        }
-        card.unveil();
-        return card;
-    }
-
-    private void playTurn() {
-        System.out.println(String.format("round %d", round));
-        Card card1 = flipCard();
-        System.out.println(this);
-        Card card2 = flipCard();
-        System.out.println(this);
-
-        if (card1.getId() != card2.getId()) {
-            card1.hide();
-            card2.hide();
-        } else {
-            unvield += 2;
-        }
-
-        round++;
     }
 
     public void generateBoard() {

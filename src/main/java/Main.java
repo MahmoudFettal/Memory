@@ -46,7 +46,7 @@ public class Main extends Application {
     }
 
     public void start(Stage primaryStage) {
-        Board game = new Board(4,2);
+        Board game = new Board(6,2);
         game.generateBoard();
 
         Text title = new Text("Keep going...");
@@ -179,7 +179,7 @@ public class Main extends Application {
             }
         }
 
-        Scene scene = new Scene(grid, 1000, 750);
+        Scene scene = new Scene(grid, 1400, 750);
         scene.getStylesheets().add("/style.css");
 
         primaryStage.setTitle("Memory");
